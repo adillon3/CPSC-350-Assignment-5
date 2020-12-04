@@ -297,19 +297,14 @@ void SchoolDatabase :: PrintFacultyAdvisees()
     }
   } while(!valid);
 
-/*
-  PRINT ALL DATA ON THE STUDENTS NOT JUST THE ID
-*/
-
-
   Faculty tempFaculty(facultyToPrintAdviseesOf);
 
   TreeNode<Faculty>* designatedFaculty = facultyTree.ReturnPointerToNode(tempFaculty);
 
-
+  //Checknig that they do exist (returning if not)
   if(designatedFaculty == nullptr)
   {
-    cout << "Sorry, no student was found with the ID number: " << facultyToPrintAdviseesOf << endl;
+    cout << "Sorry, no faculty member was found with the ID number: " << facultyToPrintAdviseesOf << endl;
     cout << "Returning to the main menu\n\n";
     return;
   }
@@ -475,22 +470,21 @@ void SchoolDatabase :: DeleteStudent()
 
 
   Student tempStudentNode(studentIDToDelete);
-
-
   TreeNode<Student>* studentToDelete = studentTree.ReturnPointerToNode(tempStudentNode);
+
+  //Checknig that they do exist (returning if not)
+  if(studentToDelete == nullptr)
+  {
+    cout << "Sorry, no student was found with the ID number: " << studentIDToDelete << endl;
+    cout << "Returning to the main menu\n\n";
+    return;
+  }
 
   int studentToDeletesAdvisor = studentToDelete -> key.GetAdvisorID();
 
-  if(studentTree.DeleteNode(studentToDelete -> key))
-  {
-    cout << studentIDToDelete << " was removed from the system\n";
-    //Removing student from advisor's advisee list
-    RemoveStudentIDFromFacultyTree(studentToDeletesAdvisor, studentIDToDelete);
-  }
-  else
-  {
-    cout << studentIDToDelete << " could not be found in the system.\n";
-  }
+  //Removing student from advisor's advisee list
+  RemoveStudentIDFromFacultyTree(studentToDeletesAdvisor, studentIDToDelete);
+  cout << studentIDToDelete << " was removed from the system\n\n";
 }
 void SchoolDatabase :: AddFaculty()
 {
