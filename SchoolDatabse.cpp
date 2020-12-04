@@ -712,7 +712,7 @@ void SchoolDatabase :: RemoveAdviseeFromID()
   int  newAdvisorID;
 
   //GETIING FACULTY
-  cout << "Please enter the ID number of the faculty memeber who you would like to remove an advisee from: ";
+  cout << "Please enter the ID number of the faculty memeber you would like to remove an advisee from: ";
   cin  >> facultyToDeleteFrom;
   if(cin.fail())
   {
@@ -727,6 +727,13 @@ void SchoolDatabase :: RemoveAdviseeFromID()
   Faculty tempFaculty(facultyToDeleteFrom);
   TreeNode<Faculty>* tempFacultyNode = facultyTree.ReturnPointerToNode(tempFaculty);
 
+  if(tempFacultyNode == nullptr)
+  {
+    cout << "Sorry, no faculty member was found with the ID number: " << facultyToDeleteFrom << endl;
+    cout << "Returning to the main menu\n\n";
+    return;
+  }
+
   //FINDING STUDENT TO REMOVE
   do
   {
@@ -737,7 +744,7 @@ void SchoolDatabase :: RemoveAdviseeFromID()
     {
       cin.clear();
       cin.ignore(100000000, '\n');
-      cout << "\nSorry, please enter a numeric student ID.\n\n";
+      cout << "\nSorry, non numeric input was recieved.";
 
       valid = false;
     }
@@ -746,7 +753,7 @@ void SchoolDatabase :: RemoveAdviseeFromID()
 
     if(!adviseesList.Search(studentToDelete))
     {
-      cin.ignore(100000000, '\n');
+      //cin.ignore(100000000, '\n');
       cout << "Sorry, that faculty ID, does not correspond with any of " << facultyToDeleteFrom << "\'s advisees.\n\n";
       cout << "Enter \"N\" if you would like to enter a new Advisor ID.\n"
            << "Enter \"R\" if you would like to return to the main menu.\n"
@@ -769,6 +776,12 @@ void SchoolDatabase :: RemoveAdviseeFromID()
   Student tempStudent(studentToDelete);
   TreeNode<Student>* studentNode = studentTree.ReturnPointerToNode(tempStudent);
 
+  if(studentNode == nullptr)
+  {
+    cout << "Sorry, no student was found with the ID number: " << studentToDelete << endl;
+    cout << "Returning to the main menu\n\n";
+    return;
+  }
 
   newAdvisorID = facultyTree.GetANewIDFacultyMemberID(facultyToDeleteFrom);
 
