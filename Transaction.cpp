@@ -10,9 +10,10 @@
   {
     person = nullptr;
   }
-  Transaction :: Transaction(Person* newPerson, TransactionType newType)
+  Transaction :: Transaction(Person* newPerson, string newPersonType, TransactionType newType)
   {
     person = newPerson;
+    personType = newPersonType;
     type = newType;
   }
   Transaction :: ~Transaction()
@@ -23,6 +24,10 @@
   Person* Transaction :: GetPerson()
   {
     return person;
+  }
+  string Transaction :: GetPersonType()
+  {
+    return personType;
   }
   TransactionType Transaction :: GetType()
   {

@@ -22,15 +22,17 @@ class Transaction
 {
 public:
   Transaction();
-  Transaction(Person* newPerson, TransactionType newType);
+  Transaction(Person* newPerson, string newPersonType, TransactionType newType);
   ~Transaction();
 
   Person* GetPerson();
+  string GetPersonType();
   TransactionType GetType();
 
 
 private:
   Person* person;
+  string personType;
   TransactionType type;
 };
 

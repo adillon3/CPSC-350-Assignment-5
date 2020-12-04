@@ -45,7 +45,6 @@
    int GetMenuInput(const string initialMessage, const int numMenuOptions);
    bool CheckFileNameValid(string fileName);
    bool GetYesOrNoInput(const string initialMessage);
-   //int GetNewAdvisorID(const int facultyToDeleteFrom);
 
    int GenerateStudentID();
    int GenerateFacultyID();
@@ -59,11 +58,18 @@
    void AddStudentIDToFacultyTree(int newAdvisorID, int newID);
    void RemoveStudentIDFromFacultyTree(int newAdvisorID, int newID);
 
+
+   //Rollback methods
+   void UndoAddStudent();
+   void UndoAddFaculty();
+   void UndoDeleteStudent();
+   void UndoDeleteFaculty();
+
    //Data fields
    StudentBST studentTree;
    FacultyBST facultyTree;
 
-   GenStack<Transaction> transactionStack;
+   GenStack<Transaction> rollbackStack;
 
    const string MAIN_MENU = "* MAIN MENU *\n"
                             "1.  Print all students and their information\n"

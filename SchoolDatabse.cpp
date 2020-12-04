@@ -84,7 +84,7 @@ void SchoolDatabase :: RunDatabase()
         RemoveAdviseeFromID();
         break;
       case 13:
-        //Rollback();
+        Rollback();
         break;
       default:
         break;
@@ -316,11 +316,6 @@ void SchoolDatabase :: PrintFacultyAdvisees()
     Student tempStudent(studentList.GetValueAtIndex(i));
     cout << studentTree.ReturnPointerToNode(tempStudent) -> key;
   }
-
-
-
-
-
 }
 void SchoolDatabase :: AddStudent()
 {
@@ -820,7 +815,41 @@ void SchoolDatabase :: RemoveAdviseeFromID()
 }
 void SchoolDatabase ::  Rollback()
 {
-  //POP top off stack
+  cerr << "Entering Rollback\n\n";
+
+  Transaction currentTransactionToUndo = rollbackStack.Pop();
+
+
+  if(currentTransactionToUndo.GetPersonType() == "STUDENT")
+  {
+    Student* currentStudent = dynamic_cast<Student*>(currentTransactionToUndo.GetPerson());
+
+    //Removing something that was added
+    if(currentTransactionToUndo.GetType() == ADDITION)
+    {
+      studentTree.DeleteNode(*currentStudent);
+    }
+    //Adding something that was returned
+    else
+    {
+      studentTree.InsertNode(*currentStudent);
+    }
+  }
+  else//faculty member
+  {
+    Faculty* currentFaculty = dynamic_cast<Faculty*>(currentTransactionToUndo.GetPerson());
+
+    //Removing something that was added
+    if(currentTransactionToUndo.GetType() == ADDITION)
+    {
+      facultyTree.DeleteNode(*currentFaculty);
+    }
+    //Adding something that was returned
+    else
+    {
+      facultyTree.InsertNode(*currentFaculty);
+    }
+  }
 }
 
 
