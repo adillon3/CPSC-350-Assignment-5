@@ -555,56 +555,58 @@ void SchoolDatabase :: DeleteFaculty()
   Faculty facultyToDelete(facultyToDeleteID);
   TreeNode<Faculty>* facultyToDeleteNode = facultyTree.ReturnPointerToNode(facultyToDelete);
 
-  if(facultyToDeleteNode != nullptr)
+  if(facultyToDeleteNode == nullptr)
   {
-    int newFacultyForAdvisees = facultyTree.GetANewIDFacultyMemberID(facultyToDeleteID);
+    cout << "Sorry, no faculty member was found with the ID number: " << facultyToDeleteID << endl;
+    cout << "Returning to the main menu\n\n";
+    return;
+  }
 
-    if(newFacultyForAdvisees == 0)
+  int newFacultyForAdvisees = facultyTree.GetANewIDFacultyMemberID(facultyToDeleteID);
+
+  if(newFacultyForAdvisees == 0)
+  {
+    cin.ignore(100000000, '\n');
+    string prompt = "Making this change will leave students with no advisors, are you sure you'd like to proceed?";
+    bool proceed = GetYesOrNoInput(prompt);
+
+    if(!proceed)
     {
-      cin.ignore(100000000, '\n');
-      string prompt = "Making this change will leave students with no advisors, are you sure you'd like to proceed?";
-      bool proceed = GetYesOrNoInput(prompt);
-
-      if(!proceed)
-      {
-        cout << "Returning to main menu\n\n";
-        return;
-      }
-
-      //SETTING ALL STUDENT ADVISORS TO 0
-      DoublyLinkedList<int> listOfAdvisees = facultyToDeleteNode -> key.GetAdviseesIDs();
-
-      for(int i = 0; i < listOfAdvisees.GetSize(); ++i)
-      {
-        Student tempStudent(listOfAdvisees.GetValueAtIndex(i));
-        TreeNode<Student>* studentToAdjustNode = studentTree.ReturnPointerToNode(tempStudent);
-        studentToAdjustNode -> key.SetAdvisorID(newFacultyForAdvisees);
-      }
-      facultyTree.DeleteNode(facultyToDeleteNode -> key);
-      cout << facultyToDeleteID << " was removed from the system and their advisees reassigned to " <<  newFacultyForAdvisees << endl << endl;
-
+      cout << "Returning to main menu\n\n";
       return;
     }
 
-    //Assigning students to new advisee
-    TreeNode<Faculty>* newFacultyForAdviseesNode = facultyTree.ReturnPointerToNode(newFacultyForAdvisees);
+    //SETTING ALL STUDENT ADVISORS TO 0
     DoublyLinkedList<int> listOfAdvisees = facultyToDeleteNode -> key.GetAdviseesIDs();
 
     for(int i = 0; i < listOfAdvisees.GetSize(); ++i)
     {
-      newFacultyForAdviseesNode -> key.AddAdvisee(listOfAdvisees.GetValueAtIndex(i));
       Student tempStudent(listOfAdvisees.GetValueAtIndex(i));
       TreeNode<Student>* studentToAdjustNode = studentTree.ReturnPointerToNode(tempStudent);
       studentToAdjustNode -> key.SetAdvisorID(newFacultyForAdvisees);
     }
-
     facultyTree.DeleteNode(facultyToDeleteNode -> key);
     cout << facultyToDeleteID << " was removed from the system and their advisees reassigned to " <<  newFacultyForAdvisees << endl << endl;
+
+    return;
   }
-  else
+
+  //Assigning students to new advisee
+  TreeNode<Faculty>* newFacultyForAdviseesNode = facultyTree.ReturnPointerToNode(newFacultyForAdvisees);
+  DoublyLinkedList<int> listOfAdvisees = facultyToDeleteNode -> key.GetAdviseesIDs();
+
+  for(int i = 0; i < listOfAdvisees.GetSize(); ++i)
   {
-    cout << facultyToDeleteID << " could not be found in the system.\n\n";
+    newFacultyForAdviseesNode -> key.AddAdvisee(listOfAdvisees.GetValueAtIndex(i));
+    Student tempStudent(listOfAdvisees.GetValueAtIndex(i));
+    TreeNode<Student>* studentToAdjustNode = studentTree.ReturnPointerToNode(tempStudent);
+    studentToAdjustNode -> key.SetAdvisorID(newFacultyForAdvisees);
   }
+
+  facultyTree.DeleteNode(facultyToDeleteNode -> key);
+  cout << facultyToDeleteID << " was removed from the system and their advisees reassigned to " <<  newFacultyForAdvisees << endl << endl;
+
+
 }
 void SchoolDatabase :: ChangeStudentAdvisor()
 {
