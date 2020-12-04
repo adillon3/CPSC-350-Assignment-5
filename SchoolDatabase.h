@@ -25,6 +25,7 @@
 
    void RunDatabase();
 
+ private:
    //Main methods for menu operations
    void PrintStudentDatabase();
    void PrintFacultyDatabase();
@@ -40,7 +41,6 @@
    void RemoveAdviseeFromID(); //Prompt for facilty ID and student ID
    void Rollback(); //Remove last action from the stack and undo last method
 
- private:
    //Private Methods
    int GetMenuInput(const string initialMessage, const int numMenuOptions);
    bool CheckFileNameValid(string fileName);

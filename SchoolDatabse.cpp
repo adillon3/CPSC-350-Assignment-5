@@ -9,8 +9,8 @@
 
 SchoolDatabase :: SchoolDatabase()
 {
-  string studentFile = "studentTable";
-  string facultyFile = "facultyTable";
+  string studentFile = "masterStudent";
+  string facultyFile = "masterFaculty";
 
 
   if(CheckFileNameValid(studentFile) && CheckFileNameValid(facultyFile))
@@ -930,7 +930,7 @@ void SchoolDatabase :: SerializeStudents()
 {
   ofstream oFile;
 
-  oFile.open("studentTable");
+  oFile.open("masterStudent");
 
   studentTree.SerializeStudentBST(oFile);
 
@@ -940,7 +940,7 @@ void SchoolDatabase :: SerializeFaculty()
 {
   ofstream oFile;
 
-  oFile.open("facultyTable");
+  oFile.open("masterFaculty");
 
   facultyTree.SerializeFacultyBST(oFile);
 
