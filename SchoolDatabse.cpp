@@ -305,6 +305,15 @@ void SchoolDatabase :: PrintFacultyAdvisees()
   Faculty tempFaculty(facultyToPrintAdviseesOf);
 
   TreeNode<Faculty>* designatedFaculty = facultyTree.ReturnPointerToNode(tempFaculty);
+
+
+  if(designatedFaculty == nullptr)
+  {
+    cout << "Sorry, no student was found with the ID number: " << facultyToPrintAdviseesOf << endl;
+    cout << "Returning to the main menu\n\n";
+    return;
+  }
+
   DoublyLinkedList<int> studentList = designatedFaculty -> key.GetAdviseesIDs();
 
   for(int i = 0; i < studentList.GetSize(); ++i)
