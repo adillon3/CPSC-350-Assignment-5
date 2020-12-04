@@ -823,9 +823,10 @@ void SchoolDatabase ::  Rollback()
   {
     currentTransactionToUndo = rollbackStack.Pop();
   }
-  catch(const char * myException)
+  catch(runtime_error myException)
   {
     cout << "No actions to undo\n\n";
+    return;
   }
 
 
