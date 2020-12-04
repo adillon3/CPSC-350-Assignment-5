@@ -18,7 +18,7 @@
   }
   Transaction :: ~Transaction()
   {
-    delete person;
+    
   }
 
   Person* Transaction :: GetPerson()

@@ -39,8 +39,9 @@ class GenStack
       //check if stack is isFull
       if(IsFull())
       {
-        ResizeArray();
+          ResizeArray();
       }
+
       myArray[++top] = data;
     }
 

@@ -56,7 +56,7 @@
    void DeserializeFaculty(string fileName);
 
    void AddStudentIDToFacultyTree(int newAdvisorID, int newID);
-   void RemoveStudentIDFromFacultyTree(int newAdvisorID, int newID);
+   void RemoveStudentIDFromFacultyTree(int oldAdvisorID, int oldStudentID);
 
 
    //Rollback methods
@@ -64,6 +64,8 @@
    void UndoAddFaculty();
    void UndoDeleteStudent();
    void UndoDeleteFaculty();
+
+   void PushTransactionToStack(Person* newStudent,  string personType, TransactionType transactionType);
 
    //Data fields
    StudentBST studentTree;
