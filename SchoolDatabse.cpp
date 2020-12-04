@@ -817,7 +817,17 @@ void SchoolDatabase ::  Rollback()
 {
   cerr << "Entering Rollback\n\n";
 
-  Transaction currentTransactionToUndo = rollbackStack.Pop();
+  Transaction currentTransactionToUndo;
+
+  try
+  {
+    currentTransactionToUndo = rollbackStack.Pop();
+  }
+  catch(const char * myException)
+  {
+    cout << "No actions to undo\n\n";
+  }
+
 
 
   if(currentTransactionToUndo.GetPersonType() == "STUDENT")
