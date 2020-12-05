@@ -42,10 +42,11 @@
    void RemoveAdviseeFromID(); //Prompt for facilty ID and student ID
    void Rollback(); //Remove last action from the stack and undo last method
 
-   //Private Methods
+
    int GetMenuInput(const string initialMessage, const int numMenuOptions);
    bool CheckFileNameValid(string fileName);
    bool GetYesOrNoInput(const string initialMessage);
+   
 
    int GenerateStudentID();
    int GenerateFacultyID();

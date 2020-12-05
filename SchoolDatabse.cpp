@@ -637,8 +637,6 @@ void SchoolDatabase :: DeleteFaculty()
 
   facultyTree.DeleteNode(facultyToDeleteNode -> key);
   cout << facultyToDeleteID << " was removed from the system and their advisees reassigned to " <<  newFacultyForAdvisees << endl << endl;
-
-
 }
 void SchoolDatabase :: ChangeStudentAdvisor()
 {
@@ -926,7 +924,6 @@ int SchoolDatabase ::  GenerateStudentID()
   int randomValue;
 
   srand(time(0));
-
   do
   {
     //genereate random 6xxxx number
@@ -971,10 +968,7 @@ int SchoolDatabase ::  GenerateFacultyID()
     {
       valid = true;
     }
-
     valid = true;
-
-
   } while(!valid);
 
   return randomValue;
