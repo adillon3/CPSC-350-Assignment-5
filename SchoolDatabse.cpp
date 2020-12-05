@@ -89,7 +89,7 @@ void SchoolDatabase :: RunDatabase()
         RemoveAdviseeFromID();
         break;
       case 13:
-        //Rollback();
+        Rollback();
         break;
       default:
         break;
@@ -316,8 +316,6 @@ void SchoolDatabase :: PrintFacultyAdvisees()
   }
 
   DoublyLinkedList<int> studentList = designatedFaculty -> key.GetAdviseesIDs();
-
-  cerr << "Number of Adisees: " << studentList.GetSize();
 
   for(int i = 0; i < studentList.GetSize(); ++i)
   {
@@ -854,11 +852,14 @@ void SchoolDatabase :: RemoveAdviseeFromID()
 }
 void SchoolDatabase ::  Rollback()
 {
+  cout << "Sorry, Rollback is not supported at this time\n\n\n";
+
+  /*
   FacultyBST mytempTree = facultyTree;
 
   AddFaculty();
 
-  mytempTree.InOrder();
+  mytempTree.InOrder();*/
 }
 bool SchoolDatabase :: CheckFileNameValid(string fileName)
 {

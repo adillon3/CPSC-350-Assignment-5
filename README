@@ -10,6 +10,7 @@ I will be using my second late assignment on this project.
 When removing the last faculty member in the system, the program checks if
  the user is sure they wish to proceed and warns them that this will remove all
  of the students as well (as was stated in class on 12/3/2020)
+Rollback feature Does not work.
 
 Help correcting class error
  https://stackoverflow.com/questions/21685843/error-invalid-conversion-from-node-to-int
