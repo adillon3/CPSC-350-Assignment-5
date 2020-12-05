@@ -31,6 +31,7 @@ SchoolDatabase :: ~SchoolDatabase()
 {
 
 }
+
 void SchoolDatabase :: RunDatabase()
 {
   //VARIABLES
@@ -44,6 +45,10 @@ void SchoolDatabase :: RunDatabase()
     menuChoice = GetMenuInput(MAIN_MENU, NUM_MAIN_MENU_OPTIONS);
 
     cout << endl << endl;
+
+
+    //StudentBST studentTreeTemp = test(studentTree);
+
 
     switch(menuChoice)
     {
@@ -67,7 +72,6 @@ void SchoolDatabase :: RunDatabase()
         break;
       case 7:
         AddStudent();
-
         break;
       case 8:
         DeleteStudent();
@@ -85,17 +89,18 @@ void SchoolDatabase :: RunDatabase()
         RemoveAdviseeFromID();
         break;
       case 13:
-        Rollback();
+        //Rollback();
         break;
       default:
         break;
     }
+
   } while(menuChoice != NUM_MAIN_MENU_OPTIONS);
 
   SerializeStudents();
   SerializeFaculty();
 
-  cout << "END\n\n";
+  cout << "Thank you for using the school database\n\n";
 }
 int SchoolDatabase :: GetMenuInput(const string initialMessage, const int numMenuOptions)
 {
@@ -312,8 +317,11 @@ void SchoolDatabase :: PrintFacultyAdvisees()
 
   DoublyLinkedList<int> studentList = designatedFaculty -> key.GetAdviseesIDs();
 
+  cerr << "Number of Adisees: " << studentList.GetSize();
+
   for(int i = 0; i < studentList.GetSize(); ++i)
   {
+    cerr << "i: " << i << endl;
     Student tempStudent(studentList.GetValueAtIndex(i));
     cout << studentTree.ReturnPointerToNode(tempStudent) -> key;
   }
@@ -432,12 +440,32 @@ void SchoolDatabase :: AddStudent()
 
   studentTree.InsertNode(newStudent);
   AddStudentIDToFacultyTree(newAdvisorID, newID);
+  cerr << "AddStudentIDToFacultyTree(newAdvisorID, newID);\n";
 
+/*
+  Transaction2* newTransaction = new Transaction2(studentTree, facultyTree);
+  cerr << "newTransaction = new Transaction2(studentTree, facultyTree);\n";
+
+  studentTree = newTransaction -> GetStudentTree();
+
+  newTransaction -> GetStudentTree().InOrder();
+
+  rollbackStack.Push(newTransaction);
+  cerr << "Push\n";
+
+  cerr << "SIZE: " << rollbackStack.GetSize() << endl << endl;
+
+
+
+
+  //rollbackStack.Peek() -> GetStudentTree().InOrder();
+
+ newTransaction = nullptr;*/
 
   //Adding transaction to rollback stack
-  PushTransactionToStack(&newStudent, "STUDENT", ADDITION);
+  //PushTransactionToStack(&newStudent, "STUDENT", ADDITION);
 
-
+//cerr << *rollbackStack.Peek().GetPerson();
 
   cout << endl << newFirstName << " " << newLastName << " has been entered into the system and given the ID Number: " << newID << endl << endl;
 }
@@ -471,9 +499,13 @@ void SchoolDatabase :: DeleteStudent()
   } while(!valid);
 
 
-  Student tempStudentNode(studentIDToDelete);
-  TreeNode<Student>* studentToDelete = studentTree.ReturnPointerToNode(tempStudentNode);
 
+
+
+  Student tempStudentNode(studentIDToDelete);
+  cerr << "Student tempStudentNode(studentIDToDelete);\n";
+  TreeNode<Student>* studentToDelete = studentTree.ReturnPointerToNode(tempStudentNode);
+  cerr << "TreeNode<Student>* studentToDelete = studentTree.ReturnPointerToNode(tempStudentNode);\n";
   //Checknig that they do exist (returning if not)
   if(studentToDelete == nullptr)
   {
@@ -481,8 +513,12 @@ void SchoolDatabase :: DeleteStudent()
     cout << "Returning to the main menu\n\n";
     return;
   }
-
+  cerr << "NOT if(studentToDelete == nullptr)\n";
   int studentToDeletesAdvisor = studentToDelete -> key.GetAdvisorID();
+  cerr << "int studentToDeletesAdvisor = studentToDelete -> key.GetAdvisorID();\n";
+  studentTree.DeleteNode(studentToDelete -> key);
+  cerr << "studentTree.DeleteNode(studentToDelete -> key);\n";
+
 
   //Removing student from advisor's advisee list
   RemoveStudentIDFromFacultyTree(studentToDeletesAdvisor, studentIDToDelete);
@@ -692,7 +728,8 @@ void SchoolDatabase :: ChangeStudentAdvisor()
           newAdvisorNode -> key.AddAdvisee(studentID);
           oldAdvisorNode -> key.RemoveAdvisee(studentID);
 
-          cout << "Removing " << studentID << " from faculty member " << tempStudentNode -> key.GetAdvisorID() << "\'s list of advisees";
+          cout << "Removing " << studentID << " from faculty member "
+               << tempStudentNode -> key.GetAdvisorID() << "\'s list of advisees";
           cout << " and adding them to " << newAdvisorID << "\'s list of advisees\n\n";
 
         }
@@ -749,6 +786,8 @@ void SchoolDatabase :: RemoveAdviseeFromID()
       cout << "\nSorry, non numeric input was recieved.";
 
       valid = false;
+
+      return;
     }
 
     DoublyLinkedList<int> adviseesList = tempFacultyNode -> key.GetAdviseesIDs();
@@ -804,7 +843,8 @@ void SchoolDatabase :: RemoveAdviseeFromID()
   studentNode -> key.SetAdvisorID(newAdvisorID);
   tempFacultyNode -> key.RemoveAdvisee(studentToDelete);
 
-  cout << "Removing " << studentToDelete << " from faculty member " <<facultyToDeleteFrom << "\'s list of advisees";
+  cout << "Removing " << studentToDelete << " from faculty member "
+       <<facultyToDeleteFrom << "\'s list of advisees\n";
 
   //Setiing new advisor list to include this student
   if(newAdvisorID != 0)
@@ -820,74 +860,16 @@ void SchoolDatabase :: RemoveAdviseeFromID()
     cout << endl << endl;
   }
 }
+
+
 void SchoolDatabase ::  Rollback()
 {
-  cerr << "Entering Rollback\n\n";
+  FacultyBST mytempTree = facultyTree;
 
-  Transaction currentTransactionToUndo;
+  AddFaculty();
 
-  try
-  {
-    currentTransactionToUndo = rollbackStack.Pop();
-  }
-  catch(runtime_error myException)
-  {
-    cout << "No actions to undo\n\n";
-    return;
-  }
-
-  if(currentTransactionToUndo.GetPersonType() == "STUDENT")
-  {
-    Student* currentStudent = dynamic_cast<Student*>(currentTransactionToUndo.GetPerson());
-
-    //Removing something that was added
-    if(currentTransactionToUndo.GetType() == ADDITION)
-    {
-      //undoing main action
-      studentTree.DeleteNode(*currentStudent);
-
-      //maintaining referential integrutiy
-      RemoveStudentIDFromFacultyTree(currentStudent -> GetAdvisorID(), currentStudent -> GetID());
-    }
-    //Adding something that was returned
-    else
-    {
-      //undoing main action
-      studentTree.InsertNode(*currentStudent);
-
-      //maintaining referential integrutiy
-      AddStudentIDToFacultyTree(currentStudent -> GetAdvisorID(), currentStudent -> GetID());
-    }
-  }//END if(currentTransactionToUndo.GetPersonType() == "STUDENT")
-  else//faculty member
-  {
-    Faculty* currentFaculty = dynamic_cast<Faculty*>(currentTransactionToUndo.GetPerson());
-
-    //Removing something that was added
-    if(currentTransactionToUndo.GetType() == ADDITION)
-    {
-      //undoing main action
-      facultyTree.DeleteNode(*currentFaculty);
-
-      //maintaining referential integrutiy
-      //RemoveStudentIDFromFacultyTree(currentFaculty -> GetID(), currentFaculty -> ());
-
-      //NEED TO REMOVE RESET THE ADVISEE FROM THE NEW ADVISOR TO THE ONE THAT IS BEING REINSERTED
-      //MIGHT BE DIFFICULT WHEN THE LIST IS EMPTY OR WHEN THERE IS ONLY ONE NODE5
-
-    }
-    //Adding something that was returned
-    else
-    {
-      //undoing main action
-      facultyTree.InsertNode(*currentFaculty);
-
-      //maintaining referential integrutiy
-    }
-  }//END else for if(currentTransactionToUndo.GetPersonType() == "STUDENT")
+  mytempTree.InOrder();
 }
-
-
 bool SchoolDatabase :: CheckFileNameValid(string fileName)
 {
   ifstream inFile;
@@ -1161,9 +1143,12 @@ void SchoolDatabase :: RemoveStudentIDFromFacultyTree(int oldAdvisorID, int oldS
   designatedFaculty -> key.RemoveAdvisee(oldStudentID);
 }
 
-void SchoolDatabase :: PushTransactionToStack(Person* newStudent,  string personType, TransactionType transactionType)
+/*
+void SchoolDatabase :: PushTransactionToStack(Student* newStudent,  string personType, TransactionType transactionType)
 {
-  Transaction* newTransaction = new Transaction(newStudent, "STUDENT", ADDITION);
+  Student* clone = newStudent;
+
+  Transaction* newTransaction = new Transaction(clone, "STUDENT", ADDITION);
 
   rollbackStack.Push(*newTransaction);
-}
+}*/

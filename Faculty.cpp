@@ -21,6 +21,16 @@ Faculty :: Faculty(int newID, string newFirstName, string newLastName, string ne
   department = newDepartment;
   adviseesIDsList = newAdviseesIDsList;
 }
+Faculty :: Faculty(const Faculty &other)
+{
+  id = other.id;
+  firstName = other.firstName;
+  lastName = other.lastName;
+  facultyLevel = other.facultyLevel;
+  department = other.department;
+  adviseesIDsList = other.adviseesIDsList;
+
+}
 Faculty :: ~Faculty()
 {}
 

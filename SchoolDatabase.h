@@ -15,7 +15,8 @@
  #include "StudentBST.h"
  #include "FacultyBST.h"
  #include "GenStack.h"
- #include "Transaction.h"
+ //#include "Transaction.h"
+                #include "Transaction2.h"
 
  class SchoolDatabase
  {
@@ -65,13 +66,13 @@
    void UndoDeleteStudent();
    void UndoDeleteFaculty();
 
-   void PushTransactionToStack(Person* newStudent,  string personType, TransactionType transactionType);
+   //void PushTransactionToStack(Student* newStudent,  string personType, TransactionType transactionType);
 
    //Data fields
    StudentBST studentTree;
    FacultyBST facultyTree;
 
-   GenStack<Transaction> rollbackStack;
+   GenStack<Transaction2*> rollbackStack;
 
    const string MAIN_MENU = "* MAIN MENU *\n"
                             "1.  Print all students and their information\n"

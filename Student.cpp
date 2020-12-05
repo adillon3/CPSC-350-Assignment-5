@@ -21,7 +21,7 @@ Student :: Student(int newID)
   advisorID = 0;
 }
 
-Student :: Student(int newID, string newFirstName, string newLastName, string newStudentLevel,
+ Student :: Student(int newID, string newFirstName, string newLastName, string newStudentLevel,
    string newMajor, double newGPA, int newAdvisorID) : Person(newID, newFirstName, newLastName)
  {
    studentLevel = newStudentLevel;
@@ -29,7 +29,18 @@ Student :: Student(int newID, string newFirstName, string newLastName, string ne
    gpa = newGPA;
    advisorID = newAdvisorID;
  }
-Student :: ~Student()
+
+ Student :: Student(const Student &other)
+ {
+   id = other.id;
+   firstName = other.firstName;
+   lastName = other.lastName;
+   studentLevel = other.studentLevel;
+   major = other.major;
+   gpa = other.gpa;
+   advisorID = other.advisorID;
+ }
+ Student :: ~Student()
  {
 
  }

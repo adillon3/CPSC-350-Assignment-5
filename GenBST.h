@@ -18,10 +18,33 @@ public:
   {
     root = nullptr;
   }
+  GenBST(const GenBST &other)
+  {
+    root = CopyConstructorHelper(other.root);
+  }
   ~GenBST()
   {
     DeleteSubTree(root);
   }
+
+  TreeNode<x>* CopyConstructorHelper(const TreeNode<x>* otherNode)
+  {
+    if(otherNode == nullptr)
+    {
+      return nullptr;
+    }
+
+    TreeNode<x>* temp = new TreeNode<x>;
+
+    temp -> key   = otherNode -> key;
+    temp -> left  = CopyConstructorHelper(otherNode -> left);
+    temp -> right = CopyConstructorHelper(otherNode -> right);
+
+    return temp;
+  }
+
+  
+
 
   void InsertNode(x value)
   {
