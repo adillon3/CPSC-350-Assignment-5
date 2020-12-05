@@ -615,19 +615,10 @@ void SchoolDatabase :: DeleteFaculty()
       return;
     }
     studentTree.DeleteTree();
-/*
-    //SETTING ALL STUDENT ADVISORS TO 0
-    DoublyLinkedList<int> listOfAdvisees = facultyToDeleteNode -> key.GetAdviseesIDs();
 
-    for(int i = 0; i < listOfAdvisees.GetSize(); ++i)
-    {
-      Student tempStudent(listOfAdvisees.GetValueAtIndex(i));
-      TreeNode<Student>* studentToAdjustNode = studentTree.ReturnPointerToNode(tempStudent);
-      studentToAdjustNode -> key.SetAdvisorID(newFacultyForAdvisees);
-    }
-    */
     facultyTree.DeleteNode(facultyToDeleteNode -> key);
-    cout << facultyToDeleteID << " was removed from the system and their advisees reassigned to " <<  newFacultyForAdvisees << endl << endl;
+    cout << facultyToDeleteID << " was removed from the system.\n";
+    cout << "All students removed from the system as well.\n\n";
 
     return;
   }
