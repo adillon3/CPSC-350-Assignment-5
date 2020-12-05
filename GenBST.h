@@ -27,6 +27,12 @@ public:
     DeleteSubTree(root);
   }
 
+  void DeleteTree()
+  {
+    DeleteSubTree(root);
+    root = nullptr;
+  }
+
   TreeNode<x>* CopyConstructorHelper(const TreeNode<x>* otherNode)
   {
     if(otherNode == nullptr)
@@ -43,7 +49,7 @@ public:
     return temp;
   }
 
-  
+
 
 
   void InsertNode(x value)

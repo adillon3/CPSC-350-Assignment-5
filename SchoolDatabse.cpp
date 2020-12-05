@@ -605,15 +605,17 @@ void SchoolDatabase :: DeleteFaculty()
   if(newFacultyForAdvisees == 0)
   {
     cin.ignore(100000000, '\n');
-    string prompt = "Making this change will leave students with no advisors, are you sure you'd like to proceed?";
+    string prompt = "Making this change leave no faculty memebers in the system, and with no advisors, the students will be deleted.\nAre you sure you'd like to proceed?";
     bool proceed = GetYesOrNoInput(prompt);
 
     if(!proceed)
     {
+      cout << facultyToDeleteID << " was not removed and remains in the system.\n";
       cout << "Returning to main menu\n\n";
       return;
     }
-
+    studentTree.DeleteTree();
+/*
     //SETTING ALL STUDENT ADVISORS TO 0
     DoublyLinkedList<int> listOfAdvisees = facultyToDeleteNode -> key.GetAdviseesIDs();
 
@@ -623,6 +625,7 @@ void SchoolDatabase :: DeleteFaculty()
       TreeNode<Student>* studentToAdjustNode = studentTree.ReturnPointerToNode(tempStudent);
       studentToAdjustNode -> key.SetAdvisorID(newFacultyForAdvisees);
     }
+    */
     facultyTree.DeleteNode(facultyToDeleteNode -> key);
     cout << facultyToDeleteID << " was removed from the system and their advisees reassigned to " <<  newFacultyForAdvisees << endl << endl;
 
@@ -860,8 +863,6 @@ void SchoolDatabase :: RemoveAdviseeFromID()
     cout << endl << endl;
   }
 }
-
-
 void SchoolDatabase ::  Rollback()
 {
   FacultyBST mytempTree = facultyTree;
@@ -891,7 +892,6 @@ bool SchoolDatabase :: CheckFileNameValid(string fileName)
 
   return valid;
 }
-
 bool SchoolDatabase :: GetYesOrNoInput(const string initialMessage)
 {
   char gameChoice;
@@ -1142,13 +1142,3 @@ void SchoolDatabase :: RemoveStudentIDFromFacultyTree(int oldAdvisorID, int oldS
 
   designatedFaculty -> key.RemoveAdvisee(oldStudentID);
 }
-
-/*
-void SchoolDatabase :: PushTransactionToStack(Student* newStudent,  string personType, TransactionType transactionType)
-{
-  Student* clone = newStudent;
-
-  Transaction* newTransaction = new Transaction(clone, "STUDENT", ADDITION);
-
-  rollbackStack.Push(*newTransaction);
-}*/
